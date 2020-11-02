@@ -1,0 +1,3 @@
+[ibm]
+ibmjump ansible_host=YOUR_IP_ADDRESS ansible_user=root
+

@@ -1,0 +1,13 @@
+{
+   "name": "test-cam-project",
+   "description": "Description for test-cam-project.",
+   "type": "userCreated",
+   "manifest": {
+     "template_type": "Terraform",
+     "template_format": "HCL",
+     "template_provider": "IBM"
+   },
+   "metadata": {
+     "bullets": []
+   }
+ }

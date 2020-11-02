@@ -1,0 +1,61 @@
+{
+  "input_datatypes": [ ],
+  "input_namespaces": [ ],
+  "output_namespace": "",
+  "input_groups": [
+    {
+      "name": "Instances-ibm_compute_vm_instance.vm1",
+      "label": "Instances - ibm_compute_vm_instance.vm1"
+    },
+    {
+      "name": "Other",
+      "label": "Other"
+    },
+    {
+      "name": "instances",
+      "label": "Instances"
+    },
+    {
+      "name": "ibm_storage_file_storage",
+      "label": "ibm_storage_file Storage"
+    }
+  ],
+  "output_groups": [ ],
+  "template_input_params": [ 
+      {
+      "name": "ssh_key",
+      "label": "Public SSH Key",
+      "description": "null",
+      "type": "string",
+      "default": "",
+      "regex": "",
+      "group_name": "",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    }
+  ],
+  "template_output_params": [  {
+    "name": "instance_ip_addr",
+    "label": "Instance Ip Addr",
+    "description": "The public IP address of the main server instance.",
+    "group_name": "",
+    "secured": false,
+    "hidden": false,
+    "shortname": "",
+    "type": "string"
+  },
+  {
+  "name": "private_key",
+  "label": "Private key",
+  "description": "The private key of the main server instance.",
+  "group_name": "",
+  "secured": true,
+  "hidden": false,
+  "shortname": "",
+  "type": "string"
+  }                                                      
+  ]
+}
