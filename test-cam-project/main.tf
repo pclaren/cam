@@ -29,22 +29,6 @@ provider "ibm" {
   version = "~> 0.7"
 }
 
-# Security group rule to allow all outbound traffic
-resource "ibm_security_group_rule" "allOutbound" {
-    direction           = "egress"
-    protocol            = "tcp"
-    security_group_id   = 3222622
-}
-
-# Security group rule to allow all inbound SSH traffic
-resource "ibm_security_group_rule" "allowSSH" {
-    direction           = "ingress"
-    port_range_min      = 22
-    port_range_max      = 22
-    protocol            = "tcp"
-    security_group_id   = 3222372
-}
-
 resource "ibm_compute_vm_instance" "vm1" {
   cores                  = 2
   memory                 = 4096
