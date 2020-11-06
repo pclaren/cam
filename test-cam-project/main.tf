@@ -21,7 +21,7 @@ resource "ibm_compute_ssh_key" "ansible_ssh_key" {
 }
 
 # Public key to upload to VM
-data "ibm_compute_ssh_key" "my_ssh_key" {
+data "ibm_compute_ssh_key" "public_key" {
     label               = "${var.ssh_key_label}"
 }
 
@@ -35,7 +35,7 @@ resource "ibm_compute_vm_instance" "vm1" {
   domain                 = "komplex-it.dk"
   hostname               = "${var.hostname}"
   datacenter             = "fra02"
-  ssh_key_ids            = ["${ibm_compute_ssh_key.ansible_ssh_key.id}", "${ibm_compute_ssh_key.my_ssh_key.id}"]
+  ssh_key_ids            = ["${ibm_compute_ssh_key.ansible_ssh_key.id}", "${data.ibm_compute_ssh_key.public_key.id}"]
   os_reference_code      = "CENTOS_7_64"
   network_speed          = 100
   hourly_billing         = true
