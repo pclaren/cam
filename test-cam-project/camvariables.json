@@ -22,9 +22,23 @@
   ],
   "output_groups": [ ],
   "template_input_params": [ 
-      {
+    {
       "name": "ssh_key",
       "label": "Public SSH Key",
+      "description": "null",
+      "type": "string",
+      "default": "",
+      "regex": "",
+      "group_name": "",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
+      "name": "hostname",
+      "label": "VM hostname",
       "description": "null",
       "type": "string",
       "default": "",
@@ -56,6 +70,6 @@
   "hidden": false,
   "shortname": "",
   "type": "string"
-  }                                                      
+  }
   ]
 }
