@@ -1,6 +1,6 @@
 {
-   "name": "test-cam-project",
-   "description": "Description for test-cam-project.",
+   "name": "test-cam-project-pcl",
+   "description": "Description for test-cam-project-pcl.",
    "type": "userCreated",
    "manifest": {
      "template_type": "Terraform",
