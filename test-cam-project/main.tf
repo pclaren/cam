@@ -4,6 +4,7 @@
 ##
 #####################################################################
 variable "ssh_key" {}
+variable "hostname" {}
 
 terraform {
   required_version = "> 0.8.0"
@@ -22,7 +23,7 @@ resource "ibm_compute_ssh_key" "ansible_ssh_key" {
 # Public key to upload to VM
 resource "ibm_compute_ssh_key" "my_ssh_key" {
     public_key          = "${var.ssh_key}"
-    label               = "camKeyForMRJUser"
+    label               = "camKeyForUser"
 }
 
 provider "ibm" {
@@ -30,10 +31,10 @@ provider "ibm" {
 }
 
 resource "ibm_compute_vm_instance" "vm1" {
-  cores                  = 2
-  memory                 = 4096
+  cores                  = 1
+  memory                 = 2048
   domain                 = "CPAT-UKI.cloud"
-  hostname               = "cpat-mcm-uki-testVM"
+  hostname               = "${var.hostname}"
   datacenter             = "lon02"
   ssh_key_ids            = ["${ibm_compute_ssh_key.ansible_ssh_key.id}", "${ibm_compute_ssh_key.my_ssh_key.id}"]
   os_reference_code      = "CENTOS_7_64"
