@@ -21,9 +21,8 @@ resource "ibm_compute_ssh_key" "ansible_ssh_key" {
 }
 
 # Public key to upload to VM
-resource "ibm_compute_ssh_key" "my_ssh_key" {
-    public_key          = "${var.ssh_key}"
-    label               = "camKeyForUser"
+data "ibm_compute_ssh_key" "my_ssh_key" {
+    label               = "pcl_public_key"
 }
 
 provider "ibm" {
@@ -33,9 +32,9 @@ provider "ibm" {
 resource "ibm_compute_vm_instance" "vm1" {
   cores                  = 1
   memory                 = 2048
-  domain                 = "CPAT-UKI.cloud"
+  domain                 = "komplex-it.dk"
   hostname               = "${var.hostname}"
-  datacenter             = "lon02"
+  datacenter             = "fra02"
   ssh_key_ids            = ["${ibm_compute_ssh_key.ansible_ssh_key.id}", "${ibm_compute_ssh_key.my_ssh_key.id}"]
   os_reference_code      = "CENTOS_7_64"
   network_speed          = 100
