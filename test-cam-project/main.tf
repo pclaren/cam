@@ -3,7 +3,7 @@
 ##      Created 07/05/2020 by admin. for test-cam-project
 ##
 #####################################################################
-variable "ssh_key" {}
+variable "ssh_key_label" {}
 variable "hostname" {}
 
 terraform {
@@ -22,7 +22,7 @@ resource "ibm_compute_ssh_key" "ansible_ssh_key" {
 
 # Public key to upload to VM
 data "ibm_compute_ssh_key" "my_ssh_key" {
-    label               = "pcl_public_key"
+    label               = "${var.ssh_key_label}"
 }
 
 provider "ibm" {

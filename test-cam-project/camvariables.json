@@ -23,6 +23,20 @@
   "output_groups": [ ],
   "template_input_params": [ 
     {
+      "name": "ssh_key_label",
+      "label": "User's public SSH key label",
+      "description": "null",
+      "type": "string",
+      "default": "",
+      "regex": "",
+      "group_name": "",
+      "required": true,
+      "secured": false,
+      "hidden": false,
+      "immutable": false,
+      "immutable_after_create": false
+    },
+    {
       "name": "hostname",
       "label": "VM hostname",
       "description": "null",
