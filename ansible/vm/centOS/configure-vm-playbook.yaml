@@ -17,7 +17,7 @@
     - replace:
         path: /etc/ssh/sshd_config
         regexp: 'PermitRootLogin yes'
-        replace: 'PermitRootLogin no'
+        replace: 'PermitRootLogin prohibit-password'
         backup: yes
     - service:
         name: sshd
