@@ -4,7 +4,7 @@
     cluster_port: 443
   become: yes
   tasks:
-  
+
     - replace:
         path: /etc/ssh/sshd_config
         regexp: 'PasswordAuthentication yes'
@@ -12,7 +12,7 @@
         backup: yes
     - service:
         name: sshd
-        state: reloaded  
+        state: reloaded
 
     - replace:
         path: /etc/ssh/sshd_config
@@ -23,14 +23,14 @@
         name: sshd
         state: reloaded
 
-    - replace:
-        path: /etc/ssh/sshd_config
-        regexp: '#Port 22'
-        replace: 'Port 2202'
-        backup: yes
-    - service:
-        name: sshd
-        state: reloaded
+    # - replace:
+    #     path: /etc/ssh/sshd_config
+    #     regexp: '#Port 22'
+    #     replace: 'Port 2202'
+    #     backup: yes
+    # - service:
+    #     name: sshd
+    #     state: reloaded
 
     - name: Ensure 'sudo' group exists
       group:
@@ -46,56 +46,63 @@
         validate: 'visudo -cf %s'
 
     - name: Add sudoers users to sudo group
-      user: name=mrj groups=sudo append=yes state=present createhome=yes
+      user: name="{{ user }}" groups=sudo append=yes state=present createhome=yes
 
-    - name: Set up authorised keys for mrj user
-      authorized_key: 
-        user: mrj 
+    - name: Set up authorised keys for "{{ user }}" user
+      authorized_key:
+        user: "{{ user }}"
         key: "{{ publickey }}"
     - service:
         name: sshd
-        state: reloaded      
+        state: reloaded
 
     - name: Download EPEL repository
       yum:
         name: epel-release
         state: latest
 
-    - name: Install UFW
+    # - name: Install UFW
+    #   yum:
+    #     enablerepo: "epel"
+    #     name: ufw
+
+    # - name: Allow everything and enable UFW
+    #   ufw:
+    #     state: enabled
+    #     policy: allow
+
+    # - name: Allow inbound access to tcp port 9080
+    #   ufw:
+    #     rule: allow
+    #     direction: in
+    #     port: '9080'
+    #     protocol: tcp
+
+    # - name: Accept packets from existing connection/new connection relating to existing connection
+    #   iptables:
+    #     chain: INPUT
+    #     protocol: tcp
+    #     destination_port: "2202"
+    #     match: conntrack
+    #     ctstate: ESTABLISHED,RELATED
+    #     syn: match
+    #     jump: ACCEPT
+    #     comment: Accept packets (with conditions)
+
+    # - name: Set the policy for the INPUT chain to DROP
+    #   iptables:
+    #     chain: INPUT
+    #     policy: DROP
+
+    - name: Install vim
       yum:
-        enablerepo: "epel"
-        name: ufw
-
-    - name: Allow everything and enable UFW
-      ufw:
-        state: enabled
-        policy: allow
-
-    - name: Allow inbound access to tcp port 9080
-      ufw:
-        rule: allow
-        direction: in
-        port: '9080'
-        protocol: tcp
-
-    - name: Accept packets from existing connection/new connection relating to existing connection
-      iptables:
-        chain: INPUT
-        protocol: tcp
-        destination_port: "2202"
-        match: conntrack
-        ctstate: ESTABLISHED,RELATED
-        syn: match 
-        jump: ACCEPT
-        comment: Accept packets (with conditions)         
-
-    - name: Set the policy for the INPUT chain to DROP
-      iptables:
-        chain: INPUT
-        policy: DROP
+        name: vim-enhanced
+        state: latest
 
     - name: Install Nano
-      shell: "yum install nano -y"
+      yum:
+        name: nano
+        state: latest
 
     - name: Install the latest version of Docker
       yum:
@@ -107,57 +114,57 @@
         name: python
         state: latest
 
-    - name: Download IBM Cloud CLI Installer
-      uri: 
-        url: "https://clis.cloud.ibm.com/install/linux"
-        dest: "./ibmcli-installer.sh"
-        mode: "100"
-        force: yes
+    # - name: Download IBM Cloud CLI Installer
+    #   uri:
+    #     url: "https://clis.cloud.ibm.com/install/linux"
+    #     dest: "./ibmcli-installer.sh"
+    #     mode: "100"
+    #     force: yes
 
-    - name: Install IBM Cloud CLI
-      shell: "./ibmcli-installer.sh" 
+    # - name: Install IBM Cloud CLI
+    #   shell: "./ibmcli-installer.sh"
 
-    - name: Update IBM Cloud CLI
-      shell: "ibmcloud update"
+    # - name: Update IBM Cloud CLI
+    #   shell: "ibmcloud update"
 
-    - name: Download IBM Cloud Pak CLI
-      shell: "curl -kLo cloudctl-linux-amd64-v3.2.4-1675 https://icp-console.agdmcm-127861d37104eb278dbfea624ca78a28-0000.eu-de.containers.appdomain.cloud:443/api/cli/cloudctl-linux-amd64"
-      
-    - name: Change IBM Cloud Pak CLI permissions
-      shell: "chmod 755 cloudctl-linux-amd64-v3.2.4-1675"
-    
-    - name: Install IBM Cloud Pak CLI
-      shell: "sudo mv cloudctl-linux-amd64-v3.2.4-1675 /usr/local/bin/cloudctl"
+    # - name: Download IBM Cloud Pak CLI
+    #   shell: "curl -kLo cloudctl-linux-amd64-v3.2.4-1675 https://icp-console.agdmcm-127861d37104eb278dbfea624ca78a28-0000.eu-de.containers.appdomain.cloud:443/api/cli/cloudctl-linux-amd64"
 
-    - name: Download OpenShift Client CLI
-      uri:
-        url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
-        dest: "./oc-linux.tar.gz" 
-        status_code: [200, 304]
+    # - name: Change IBM Cloud Pak CLI permissions
+    #   shell: "chmod 755 cloudctl-linux-amd64-v3.2.4-1675"
 
-    - name: Unzip OC tar
-      shell: "gunzip -c oc-linux.tar.gz |tar -xvf -"
+    # - name: Install IBM Cloud Pak CLI
+    #   shell: "sudo mv cloudctl-linux-amd64-v3.2.4-1675 /usr/local/bin/cloudctl"
 
-    - name: Move OC to bin
-      shell: "cp oc /usr/local/bin/"
+    # - name: Download OpenShift Client CLI
+    #   uri:
+    #     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz"
+    #     dest: "./oc-linux.tar.gz"
+    #     status_code: [200, 304]
 
-    - name: Download Kubernetes CLI
-      uri:
-        url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux.tar.gz"
-        dest: "./kubernetes-linux.tar.gz"
-        status_code: [200, 304]
+    # - name: Unzip OC tar
+    #   shell: "gunzip -c oc-linux.tar.gz |tar -xvf -"
 
-    - name: Unzip Kubernetes tar
-      shell: "gunzip -c kubernetes-linux.tar.gz |tar -xvf -"
+    # - name: Move OC to bin
+    #   shell: "cp oc /usr/local/bin/"
 
-    - name: Move kubectl to bin
-      shell: "cp kubectl /usr/local/bin/"
+    # - name: Download Kubernetes CLI
+    #   uri:
+    #     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux.tar.gz"
+    #     dest: "./kubernetes-linux.tar.gz"
+    #     status_code: [200, 304]
 
-    - name: Download Helm
-      uri:
-        url: "https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3"
-        dest: "./helm-installer.sh"
-        mode: "700"
+    # - name: Unzip Kubernetes tar
+    #   shell: "gunzip -c kubernetes-linux.tar.gz |tar -xvf -"
 
-    - name: Install Helm
-      shell: "./helm-installer.sh"
+    # - name: Move kubectl to bin
+    #   shell: "cp kubectl /usr/local/bin/"
+
+    # - name: Download Helm
+    #   uri:
+    #     url: "https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3"
+    #     dest: "./helm-installer.sh"
+    #     mode: "700"
+
+    # - name: Install Helm
+    #   shell: "./helm-installer.sh"
